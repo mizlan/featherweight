@@ -26,8 +26,4 @@ def download(link, code):
             title = json.load(file)['title']
             return title
     except FileNotFoundError:
-        sys.exit(f"Cannot find json file info_file")
-
-if __name__ == "__main__":
-    link = sys.argv[1]
-    download(link, "999")
+        sys.exit(f'Cannot find json file info_file')
