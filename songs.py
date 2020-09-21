@@ -76,7 +76,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Song configuration')
     group = parser.add_mutually_exclusive_group()
     group.add_argument('-l', '--list', action="store_true")
-    group.add_argument('-a', '--add-url', type=str)
+    group.add_argument('-a', '--add-url', type=str, metavar='<URL>')
     args = parser.parse_args()
     print(args)
     if args.list:
