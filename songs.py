@@ -5,6 +5,7 @@ import file_management
 import playlists
 import util
 from pathlib import Path
+import argparse
 
 def get_song_info(song_id):
     songs_dir = file_management.get_songs_path()
@@ -21,7 +22,7 @@ def get_song_info(song_id):
 def song_exists(link) -> bool:
     songs_dir = file_management.get_songs_path()
     for filepath in glob.glob(os.path.join(songs_dir, '*.info.json')):
-        print(filepath)
+        # print(filepath)
         abspath = os.path.join(songs_dir, filepath)
         with open(abspath) as file:
             obj = json.load(file)
@@ -70,4 +71,22 @@ def remove_song(song_id):
         abspath = os.path.join(songs_dir, filepath)
         print(f'deleting {abspath}')
         os.remove(abspath)
-    
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Song configuration')
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument('-l', '--list', action="store_true")
+    group.add_argument('-a', '--add-url', type=str)
+    args = parser.parse_args()
+    print(args)
+    if args.list:
+        ids_path = file_management.get_ids_path()
+        all_ids = util.lines(open(ids_path))
+        if len(all_ids) == 0:
+            print('no songs!')
+        for song_id in all_ids:
+            json_data = get_song_info(song_id)
+            print(json_data['title'])
+    elif args.add_url is not None:
+        link = args.add_url
+        add_song(link)
