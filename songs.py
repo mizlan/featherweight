@@ -60,11 +60,10 @@ def remove_song(song_id):
         if suf == 'playlist':
             playlist_name = os.path.splitext(filename)[0]
             playlists.remove_song(song_id, playlist_name)
-    
-    #TODO: function to delete song from ids, then delete the files from songs/
+
     ids_dest = file_management.get_ids_path()
     util.purge_id(song_id, ids_dest)
-    
+
     # delete relevant files
     songs_dir = file_management.get_songs_path()
     for filepath in glob.glob(os.path.join(songs_dir, f'{song_id}.*')):
@@ -77,6 +76,7 @@ if __name__ == "__main__":
     group = parser.add_mutually_exclusive_group()
     group.add_argument('-l', '--list', action="store_true")
     group.add_argument('-a', '--add-url', type=str, metavar='<URL>')
+    group.add_argument('-d', '--delete', type=str, metavar='<ID>')
     args = parser.parse_args()
     print(args)
     if args.list:
@@ -87,6 +87,11 @@ if __name__ == "__main__":
         for song_id in all_ids:
             json_data = get_song_info(song_id)
             print(f'[{song_id}] {json_data["title"]}')
+
     elif args.add_url is not None:
         link = args.add_url
         add_song(link)
+
+    elif args.delete is not None:
+        song_id = args.delete
+        remove_song(song_id)
