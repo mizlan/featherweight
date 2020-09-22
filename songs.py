@@ -9,7 +9,7 @@ import argparse
 
 def get_song_info(song_id):
     songs_dir = file_management.get_songs_path()
-    
+
     filename = f'{song_id}.info.json'
 
     dest = os.path.join(songs_dir, filename)
@@ -86,7 +86,7 @@ if __name__ == "__main__":
             print('no songs!')
         for song_id in all_ids:
             json_data = get_song_info(song_id)
-            print(json_data['title'])
+            print(f'[{song_id}] {json_data["title"]}')
     elif args.add_url is not None:
         link = args.add_url
         add_song(link)
