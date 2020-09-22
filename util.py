@@ -10,7 +10,7 @@ def purge_id(song_id, filepath):
             print(f'creating temporary file {tmpfile}')
             for candidate in lines(ids):
                 if candidate != song_id:
-                    tmpfile.write(candidate + '\n')
+                    upd.write(candidate + '\n')
     os.remove(filepath)
     print(f'removing {filepath}')
     os.rename(tmpfile, filepath)

@@ -49,8 +49,10 @@ def add_song_to_playlist(song_id: str, playlist_name):
     playlist_dest = os.path.join(playlist_dir, filename)
 
     if not os.path.exists(playlist_dest):
-        print(f'playlist does not exist: {playlist_dest}')
-        raise KeyError
+        raise KeyError(f'playlist does not exist: {playlist_dest}')
+
+    if song_id not in file_management.get_song_ids():
+        raise KeyError('song id does not exist')
 
     playlist = open(playlist_dest, 'a')
     playlist.write(song_id + '\n')
