@@ -78,7 +78,7 @@ if __name__ == "__main__":
     group.add_argument('-a', '--add-url', type=str, metavar='<URL>')
     group.add_argument('-d', '--delete', type=str, metavar='<ID>')
     args = parser.parse_args()
-    print(args)
+    # print(args)
     if args.list:
         ids_path = file_management.get_ids_path()
         all_ids = util.lines(open(ids_path))

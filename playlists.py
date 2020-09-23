@@ -1,5 +1,8 @@
 import file_management, os
+import argparse
 from pathlib import Path
+import sys
+import songs
 
 import util
 
@@ -54,6 +57,13 @@ def add_song_to_playlist(song_id: str, playlist_name):
     if song_id not in file_management.get_song_ids():
         raise KeyError('song id does not exist')
 
+    current_songs = util.lines(open(playlist_dest))
+
+    if song_id in current_songs:
+        print('warning! song {song_id} already in current songs! type "y" to continue')
+        if input('>') != 'y':
+            return
+
     playlist = open(playlist_dest, 'a')
     playlist.write(song_id + '\n')
 
@@ -65,5 +75,42 @@ def remove_song_from_playlist(song_id: str, playlist_name):
     if not os.path.exists(playlist_dest):
         print(f'playlist does not exist: {playlist_dest}')
         raise KeyError
-    
+
     util.purge_id(song_id, playlist_dest)
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Playlist configuration')
+    group = parser.add_mutually_exclusive_group()
+
+    group.add_argument('-l', '--list', action="store_true")
+    group.add_argument('-c', '--create', type=str, metavar='<PLAYLIST>')
+    group.add_argument('-d', '--delete', type=str, metavar='<PLAYLIST>')
+    group.add_argument('-a', '--add-song', type=str, metavar='<PLAYLIST>')
+    group.add_argument('-r', '--remove-song', type=str, metavar='<PLAYLIST>')
+
+    parser.add_argument('-s', '--song', type=str, metavar='<SONG NAME>')
+    args = parser.parse_args()
+    # print(args)
+    if args.list:
+        playlist_dir = file_management.get_playlists_path()
+        for filename in os.listdir(playlist_dir):
+            abspath = os.path.join(playlist_dir, filename)
+            print(os.path.splitext(filename)[0])
+            for song_id in util.lines(open(abspath)):
+                print(f'[{song_id}] {songs.get_song_info(song_id)["title"]}')
+
+    elif args.create is not None:
+        create_playlist(args.create)
+
+    elif args.delete is not None:
+        delete_playlist(args.delete)
+
+    elif args.add_song is not None:
+        if args.song is None:
+            sys.exit('provide a song (-s)')
+        add_song_to_playlist(args.song, args.add_song)
+
+    elif args.remove_song is not None:
+        if args.song is None:
+            sys.exit('provide a song (-s)')
+        remove_song_from_playlist(args.song, args.remove_song)
