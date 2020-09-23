@@ -2,16 +2,24 @@
 
 Manage music from the terminal.
 
-Set environment variable
-```
+## Set a Directory
+
+Set environment variable `FWMM_DIR` as shown below in rc file
+
+```bash
 export FWMM_DIR="$HOME/code/fwmm"
 ```
 
+## Song-related Functions
+
 ```bash
-python -i songs.py
+python songs.py -h
 ```
 
-```python
->>> add_song('https://www.youtube.com/watch?v=aTgXgN9fOsk')
+## Playlist-related Functions
+
+```bash
+python playlists.py -h
 ```
 
+*Tested on python 3.8*
