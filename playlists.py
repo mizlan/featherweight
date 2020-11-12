@@ -1,4 +1,4 @@
-import file_management, os
+import file_management, os, glob
 import argparse
 from pathlib import Path
 import sys
@@ -64,8 +64,8 @@ def add_song_to_playlist(song_id: str, playlist_name):
         if input('>') != 'y':
             return
 
-    playlist = open(playlist_dest, 'a')
-    playlist.write(song_id + '\n')
+    with open(playlist_dest, 'a') as playlist:
+        playlist.write(song_id + '\n')
 
 def remove_song_from_playlist(song_id: str, playlist_name):
     filename = f'{playlist_name}.playlist'
@@ -77,6 +77,30 @@ def remove_song_from_playlist(song_id: str, playlist_name):
         raise KeyError
 
     util.purge_id(song_id, playlist_dest)
+
+def show_playlist(playlist_name):
+    filename = f'{playlist_name}.playlist'
+    playlist_dir = file_management.get_playlists_path()
+    playlist_dest = os.path.join(playlist_dir, filename)
+
+    if not os.path.exists(playlist_dest):
+        print(f'playlist does not exist: {playlist_dest}')
+        raise KeyError
+
+    res = [playlist_name]
+    for song_id in util.lines(open(playlist_dest)):
+        res.append(f'[{song_id}] {songs.get_song_info(song_id)["title"]}')
+
+    return res
+
+def playlist_names():
+    playlist_path = os.path.join(playlist_dir, filename)
+    res = []
+    for filepath in glob.glob(playlist_path, '*.playlist'):
+        res.append(Path(os.path.join(playlist_path, filepath)).suffix)
+
+    return res
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Playlist configuration')

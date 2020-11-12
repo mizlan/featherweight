@@ -9,8 +9,9 @@ def get_path():
 
     if FWMM_PATH is None:
         FWMM_PATH = os.path.join(HOME_PATH, '.fwmmd')
-        print(f'FWMM_PATH is not defined, resorting to default path: {FWMM_PATH}')
-    
+        if 'FWMM_SUPPRESS_HOME' not in os.environ:
+            print(f'FWMM_PATH is not defined, resorting to default path: {FWMM_PATH}')
+
     if not os.path.isdir(FWMM_PATH):
         os.makedirs(FWMM_PATH)
 
