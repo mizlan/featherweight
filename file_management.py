@@ -52,15 +52,15 @@ def get_ids_path():
     if not os.path.exists(SONG_ID_PATH):
         print(f'ids.txt doesnt exist')
         print(f'-> creating ids.txt')
-    
+
         Path(SONG_ID_PATH).touch()
-    
+
     return SONG_ID_PATH
 
 def get_song_ids():
 
     dest = get_ids_path()
-    
+
     with open(dest) as f:
         return util.lines(f)
 
